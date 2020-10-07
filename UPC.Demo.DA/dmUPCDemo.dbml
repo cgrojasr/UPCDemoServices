@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="upcdemo" Class="dmUPCDemoDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=dbupcaad.c7hd087gmch2.us-east-2.rds.amazonaws.com;Initial Catalog=upcdemo;Persist Security Info=True;User ID=admin" SettingsObjectName="UPC.Demo.DA.Properties.Settings" SettingsPropertyName="upcdemoConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.orderBody" Member="orderBodies">
+    <Type Name="orderBody">
+      <Column Name="idProduct" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="idOrderHeader" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="discount" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Association Name="orderHeader_orderBody" Member="orderHeader" ThisKey="idOrderHeader" OtherKey="id" Type="orderHeader" IsForeignKey="true" />
+      <Association Name="product_orderBody" Member="product" ThisKey="idProduct" OtherKey="id" Type="product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.orderHeader" Member="orderHeaders">
+    <Type Name="orderHeader">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idUser" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="orderNumber" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="numberCard" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="address" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="idUserModify" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="dateModify" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="idUserCreated" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="dateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="commet" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Association Name="orderHeader_orderBody" Member="orderBodies" ThisKey="id" OtherKey="idOrderHeader" Type="orderBody" />
+      <Association Name="userApp_orderHeader" Member="userApp" ThisKey="idUser" OtherKey="id" Type="userApp" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.product" Member="products">
+    <Type Name="product">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="image" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idUserCreated" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="dateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="idUserModify" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="dateModify" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="product_orderBody" Member="orderBodies" ThisKey="id" OtherKey="idProduct" Type="orderBody" />
+    </Type>
+  </Table>
+  <Table Name="dbo.userApp" Member="userApps">
+    <Type Name="userApp">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.Data.Linq.Binary" DbType="VarBinary(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="email" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idUserCreated" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="dateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="idUserModify" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="dateModify" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="userApp_orderHeader" Member="orderHeaders" ThisKey="id" OtherKey="idUser" Type="orderHeader" />
+    </Type>
+  </Table>
+</Database>
