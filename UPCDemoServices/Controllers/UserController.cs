@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using UPC.Demo.BE;
 using UPC.Demo.BL;
+using UPCDemoServices.Models;
 
 namespace UPCDemoServices.Controllers
 {
@@ -19,36 +20,86 @@ namespace UPCDemoServices.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UserBE.Entity> ListWithFilters()
+        public Response<IEnumerable<UserBE.Entity>> ListWithFilters()
         {
-            return objUserBL.ListWithFilters(null);
+            var model = new Response<IEnumerable<UserBE.Entity>>();
+            try
+            {
+                model.response = objUserBL.ListWithFilters(null);
+            }
+            catch (Exception ex)
+            {
+                model.code = 400;
+                model.description = ex.Message;
+            }
+            return model;
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("Login")]
-        public UserBE.Entity Login([FromBody] UserBE.Authentication objUserBE)
+        public Response<UserBE.Login> Login([FromBody] UserBE.Authentication objUserBE)
         {
-            return objUserBL.Login(objUserBE);
+            var model = new Response<UserBE.Login>();
+            try
+            {
+                model.response = objUserBL.Login(objUserBE);
+            }
+            catch (Exception ex)
+            {
+                model.code = 400;
+                model.description = ex.Message;
+            }
+            return model;
         }
 
         [HttpPost]
-        public UserBE.Entity Register([FromBody] UserBE.Entity objUserBE)
+        public Response<UserBE.Entity> Register([FromBody] UserBE.Entity objUserBE)
         {
-            return objUserBL.Register(objUserBE);
+            var model = new Response<UserBE.Entity>();
+            try
+            {
+                model.response = objUserBL.Register(objUserBE);
+            }
+            catch (Exception ex)
+            {
+                model.code = 400;
+                model.description = ex.Message;
+            }
+            return model;
         }
 
         [HttpPut]
-        public UserBE.Entity Update([FromBody] UserBE.Entity objUserBE)
+        public Response<UserBE.Entity> Update([FromBody] UserBE.Entity objUserBE)
         {
-            return objUserBL.Update(objUserBE);
+            var model = new Response<UserBE.Entity>();
+            try
+            {
+                model.response = objUserBL.Update(objUserBE);
+            }
+            catch (Exception ex)
+            {
+                model.code = 400;
+                model.description = ex.Message;
+            }
+            return model;
         }
 
         [HttpPut]
-        [Route("ChangePass")]
-        public bool Update([FromBody] UserBE.ChangePassword objUserBE)
+        [Route("ChangePassword")]
+        public Response<bool> ChangePassword([FromBody] UserBE.ChangePassword objUserBE)
         {
-            return objUserBL.ChangePassword(objUserBE);
+            var model = new Response<bool>();
+            try
+            {
+                model.response = objUserBL.ChangePassword(objUserBE);
+            }
+            catch (Exception ex)
+            {
+                model.code = 400;
+                model.description = ex.Message;
+            }
+            return model;
         }
     }
 }

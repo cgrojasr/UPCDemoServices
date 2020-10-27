@@ -10,7 +10,7 @@ namespace UPC.Demo.BL
 {
     public interface IUserDA
     {
-        UserBE.Entity Login(UserBE.Authentication objUserBE);
+        UserBE.Login Login(UserBE.Authentication objUserBE);
         UserBE.Entity Register(UserBE.Entity objUserBE);
         UserBE.Entity Update(UserBE.Entity objUserBE);
         IEnumerable<UserBE.Entity> ListWithFilters(bool? active);
@@ -36,11 +36,10 @@ namespace UPC.Demo.BL
                 };
 
                 var result = objUserDA.Login(objUserBEAuth);
-                return objUserDA.ChangePassword(result.Id, objUserBE.OldPassword);
+                return objUserDA.ChangePassword(result.Id, objUserBE.NewPassword);
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -58,7 +57,7 @@ namespace UPC.Demo.BL
             }
         }
 
-        public UserBE.Entity Login(UserBE.Authentication objUserBE)
+        public UserBE.Login Login(UserBE.Authentication objUserBE)
         {
             try
             {

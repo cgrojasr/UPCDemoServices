@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using UPC.Demo.BE;
@@ -28,14 +27,15 @@ namespace UPC.Demo.DA
             try
             {
                 var query = from product in db.products
-                            where product.active
+                            where product.active.Equals(true)
                             select new ProductBE
                             {
                                 Id = product.id,
                                 Title = product.title,
                                 Description = product.description,
-                                Image = product.title,
-                                Price = product.price
+                                Image = product.image,
+                                Price = product.price,
+                                Active = product.active
                             };
 
                 return query;

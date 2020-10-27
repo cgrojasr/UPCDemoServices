@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +11,7 @@ using UPC.Demo.BE;
 namespace UPC.Demo.DA
 {
     public interface IUserDA {
-        UserBE.Entity Login(UserBE.Authentication objUserBE);
+        UserBE.Login Login(UserBE.Authentication objUserBE);
         UserBE.Entity Register(UserBE.Entity objUserBE);
         UserBE.Entity Update(UserBE.Entity objUserBE);
         IEnumerable<UserBE.Entity> ListWithFilters(bool? active);
@@ -35,7 +37,8 @@ namespace UPC.Demo.DA
                                 Id = user.id,
                                 UserName = user.username,
                                 Email = user.email,
-                                Active = user.active
+                                Active = user.active,
+                                Password = user.password.ToArray()
                             };
 
                 return query;
@@ -47,16 +50,19 @@ namespace UPC.Demo.DA
             }
         }
 
-        public UserBE.Entity Login(UserBE.Authentication objUserBE)
+        public UserBE.Login Login(UserBE.Authentication objUserBE)
         {
             try
             {
+                var response = new UserBE.Login();
+
                 var query = from user in db.userApps
                             where user.username.Equals(objUserBE.UserName) && user.password.Equals(objUserBE.Password)
-                            select new UserBE.Entity
+                            select new UserBE.Login
                             {
                                 Id = user.id,
                                 UserName = user.username,
+                                Password = user.password.ToArray(),
                                 Email = user.email,
                                 Active = user.active
                             };
@@ -65,7 +71,6 @@ namespace UPC.Demo.DA
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -74,21 +79,28 @@ namespace UPC.Demo.DA
         {
             try
             {
-                var entity = (from user in db.userApps
-                              where user.id.Equals(idUser)
-                              select user).Single();
+                var response = true;
 
-                entity.password = newPassword;
-                entity.idUserModify = idUser;
-                entity.dateModify = DateTime.Now;
-                db.SubmitChanges();
+                var query = (from user in db.userApps
+                             where user.id.Equals(idUser)
+                             select user);
 
-                return true;
+                if (query.Count().Equals(1))
+                {
+                    var entity = query.Single();
+                    entity.password = newPassword;
+                    entity.idUserModify = idUser;
+                    entity.dateModify = DateTime.Now;
+                    db.SubmitChanges();
+                }
+                else
+                    response = false;
+
+                return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return false;
+                throw ex;
             }
         }
 

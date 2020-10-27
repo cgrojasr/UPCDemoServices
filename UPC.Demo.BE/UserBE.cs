@@ -22,6 +22,15 @@ namespace UPC.Demo.BE
             public byte[] Password { get; set; }
         }
 
+        public class Login
+        {
+            public int Id { get; set; }
+            public string UserName { get; set; }
+            public byte[] Password { get; set; }
+            public string Email { get; set; }
+            public bool Active { get; set; }
+        }
+
         public class ChangePassword
         {
             public string UserName { get; set; }
